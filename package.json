@@ -1,0 +1,23 @@
+{
+  "name": "shopify-app-extension-template",
+  "version": "0.1.0",
+  "main": "extension.ts",
+  "engines": {
+    "node": ">=10.16.0"
+  },
+  "repository": "https://github.com/Shopify/shopify-app-extension-template.git",
+  "author": "Shopify <app-extensions@shopify.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@shopify/argo-admin-cli": "latest",
+    "typescript": "^3.0.0"
+  },
+  "scripts": {
+    "server": "argo-admin-cli server --entry=\"index.tsx\" --port=39351 --type=PRODUCT_SUBSCRIPTION",
+    "build": "argo-admin-cli build --entry=\"index.tsx\""
+  },
+  "dependencies": {
+    "@shopify/argo-admin-react": "latest",
+    "react": "^16.13.0"
+  }
+}
