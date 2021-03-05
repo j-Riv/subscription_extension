@@ -89,7 +89,31 @@ function Add() {
 
         // Upon completion, call done() to trigger a reload of the resource page
         // and terminate the extension.
-        done();
+        // The product and variant ID's collected from the modal form
+        let payload = {
+          productId: data.productId,
+          variantId: data.variantId,
+        };
+
+        // Here, send the form data to your app server to add the product to an existing plan.
+        const response = await fetch(`https://f70e0c86b79d.ngrok.io/subscription-plan/add`, {
+          method: 'POST',
+          headers: {
+            'X-SUAVESCRIBE-KEY': token || 'unknown token',
+          },
+          body: JSON.stringify(payload),
+        });
+        console.log(response);
+        // If the server responds with an OK status, then refresh the UI and close the modal
+        // Upon completion, call done() to trigger a reload of the resource page
+        // and terminate the extension.
+        if (response.ok) {
+          done();
+        } else {
+          console.log('Handle error.');
+        }
+
+        close();
       },
     });
 
@@ -150,8 +174,30 @@ function Create() {
     const token = await getSessionToken();
 
     // Here, send the form data to your app server to create the new plan.
+    // The product and variant ID's collected from the modal form.
+    let payload = {
+      productId: data.productId,
+      variantId: data.variantId,
+    };
+    console.log(payload, JSON.stringify(payload));
+    
+    // Send the form data to your app server to create the new plan.
+    const response = await fetch(`https://f70e0c86b79d.ngrok.io/subscription-plan/create`, {
+      method: 'POST',
+      headers: {
+        'X-SUAVESCRIBE-KEY': token || 'unknown token',
+      },
+      body: JSON.stringify(payload),
+    });
+    console.log(response);
+    // If the server responds with an OK status, then refresh the UI and close the modal
+    if (response.ok) {
+      done();
+    } else {
+      console.log('Handle error.');
+    }
 
-    done();
+    close();
   }, [getSessionToken, done]);
 
   const cachedActions = useMemo(
@@ -231,8 +277,31 @@ function Remove() {
         const token = await getSessionToken();
 
         // Here, send the form data to your app server to remove the product from the plan.
+        // The product ID, variant ID, variantIds, and the selling plan group ID
+        let payload = {
+          sellingPlanGroupId: data.sellingPlanGroupId,
+          productId: data.productId,
+          variantId: data.variantId,
+          variantIds: data.variantIds,
+        };
+        
+        // Here, send the form data to your app server to add the product to an existing plan.
+        const response = await fetch(`https://f70e0c86b79d.ngrok.io/subscription-plan/remove`, {
+          method: 'POST',
+          headers: {
+            'X-SUAVESCRIBE-KEY': token || 'unknown token',
+          },
+          body: JSON.stringify(payload),
+        });
+        console.log(response);
+        // If the server responds with an OK status, then refresh the UI and close the modal
+        if (response.ok) {
+          done();
+        } else {
+          console.log('Handle error.');
+        }
 
-        done();
+        close();
       },
     });
 
@@ -277,8 +346,29 @@ function Edit() {
     const token = await getSessionToken();
 
     // Here, send the form data to your app server to modify the selling plan.
+    // The product ID and variant ID collected from the modal form and the selling plan group ID
+    let payload = {
+      sellingPlanGroupId: data.sellingPlanGroupId,
+      productId: data.productId,
+      variantId: data.variantId,
+    };
 
-    done();
+    // Here, send the form data to your app server to add the product to an existing plan.
+    const response = await fetch(`https://f70e0c86b79d.ngrok.io/subscription-plan/edit`, {
+      method: 'POST',
+      headers: {
+        'X-SUAVESCRIBE-KEY': token || 'unknown token',
+      },
+      body: JSON.stringify(payload),
+    });
+    console.log(response);
+    // If the server responds with an OK status, then refresh the UI and close the modal
+    if (response.ok) {
+      done();
+    } else {
+      console.log('Handle error.');
+    }
+    close();
   }, [getSessionToken, done]);
 
   const cachedActions = useMemo(
