@@ -99,7 +99,7 @@ function Add() {
         const response = await fetch(`https://f70e0c86b79d.ngrok.io/subscription-plan/add`, {
           method: 'POST',
           headers: {
-            'X-SUAVESCRIBE-KEY': token || 'unknown token',
+            'X-SUAVESCRIBE-TOKEN': token || 'unknown token',
           },
           body: JSON.stringify(payload),
         });
@@ -178,18 +178,23 @@ function Create() {
     let payload = {
       productId: data.productId,
       variantId: data.variantId,
+      planTitle: planTitle,
+      percentageOff: percentageOff,
+      deliveryFrequency: deliveryFrequency
     };
-    console.log(payload, JSON.stringify(payload));
     
     // Send the form data to your app server to create the new plan.
     const response = await fetch(`https://f70e0c86b79d.ngrok.io/subscription-plan/create`, {
       method: 'POST',
       headers: {
-        'X-SUAVESCRIBE-KEY': token || 'unknown token',
+        'X-SUAVESCRIBE-TOKEN': token || 'unknown token',
       },
       body: JSON.stringify(payload),
     });
     console.log(response);
+    // const json = await response.json();
+    // console.log('JSON RESPONSE');
+    // console.log(json);
     // If the server responds with an OK status, then refresh the UI and close the modal
     if (response.ok) {
       done();
@@ -198,7 +203,7 @@ function Create() {
     }
 
     close();
-  }, [getSessionToken, done]);
+  }, [getSessionToken, done, planTitle, percentageOff, deliveryFrequency]);
 
   const cachedActions = useMemo(
     () => (
@@ -210,6 +215,11 @@ function Create() {
     ),
     [onPrimaryAction, close]
   );
+  
+  useEffect(() => {
+    console.log(planTitle, '- has changed');
+    console.log(planTitle);
+  }, [planTitle]);
 
   return (
     <>
@@ -289,7 +299,7 @@ function Remove() {
         const response = await fetch(`https://f70e0c86b79d.ngrok.io/subscription-plan/remove`, {
           method: 'POST',
           headers: {
-            'X-SUAVESCRIBE-KEY': token || 'unknown token',
+            'X-SUAVESCRIBE-TOKEN': token || 'unknown token',
           },
           body: JSON.stringify(payload),
         });
@@ -357,7 +367,7 @@ function Edit() {
     const response = await fetch(`https://f70e0c86b79d.ngrok.io/subscription-plan/edit`, {
       method: 'POST',
       headers: {
-        'X-SUAVESCRIBE-KEY': token || 'unknown token',
+        'X-SUAVESCRIBE-TOKEN': token || 'unknown token',
       },
       body: JSON.stringify(payload),
     });
