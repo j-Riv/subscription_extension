@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useMemo, useCallback} from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import {
   Button,
   Card,
@@ -32,7 +32,9 @@ const translations: {
   },
 };
 
-function Actions({onPrimary, onClose, title}) {
+const serverUrl = 'https://eab73c93d01c.ngrok.io';
+
+function Actions({ onPrimary, onClose, title }) {
   return (
     <Stack spacing="none" distribution="fill">
       <Button title="Cancel" onPress={onClose} />
@@ -68,17 +70,51 @@ function Add() {
 
   // Session token contains information about the current user. Use it to authenticate calls
   // from your extension to your app server.
-  const {getSessionToken} = useSessionToken();
+  const { getSessionToken } = useSessionToken();
 
   const [selectedPlans, setSelectedPlans] = useState<string[]>([]);
+  const [allPlans, setAllPlans] = useState<any[]>([]);
   const mockPlans = [
-    {name: 'Subscription Plan A', id: 'a'},
-    {name: 'Subscription Plan B', id: 'b'},
-    {name: 'Subscription Plan C', id: 'c'},
+    { name: 'Subscription Plan A', id: 'a' },
+    { name: 'Subscription Plan B', id: 'b' },
+    { name: 'Subscription Plan C', id: 'c' },
   ];
+
+  // Get All Plans
+  const getAllPlans = async () => {
+    const token = await getSessionToken();
+    console.log('GETTING ALL PLANS');
+    const response = await fetch(`${serverUrl}/subscription-plan/all`, {
+      method: 'POST',
+      headers: {
+        'X-SUAVESCRIBE-TOKEN': token || 'unknown token',
+      },
+    });
+    const planGroups = await response.json();
+    console.log('THE RESPONSE');
+    console.log(planGroups);
+    const planData = [];
+    planGroups.forEach(plans => {
+      console.log('Plan: ', plans.node.name);
+      console.log('Plan ID: ', plans.node.id);
+      // set state
+      planData.push({ name: plans.node.name, id: plans.node.id });
+      plans.node.sellingPlans.edges.forEach(sellingPlan => {
+        console.log('Selling Plan: ', sellingPlan.node.name);
+        console.log('Selling Plan ID: ', sellingPlan.node.id);
+      });
+    });
+    // set state
+    setAllPlans(planData);
+  };
+
+  useEffect(() => {
+    getAllPlans();
+  }, []);
 
   // Configure the extension container UI
   useEffect(() => {
+    // Get Plans
     setPrimaryAction({
       content: 'Add to plan',
       onAction: async () => {
@@ -90,19 +126,31 @@ function Add() {
         // Upon completion, call done() to trigger a reload of the resource page
         // and terminate the extension.
         // The product and variant ID's collected from the modal form
-        let payload = {
+        interface AddPayload {
+          productId: string;
+          variantId?: string;
+          selectedPlans: string[];
+        }
+
+        let payload: AddPayload = {
           productId: data.productId,
           variantId: data.variantId,
+          selectedPlans: selectedPlans,
         };
 
+        console.log(payload);
+
         // Here, send the form data to your app server to add the product to an existing plan.
-        const response = await fetch(`https://f70e0c86b79d.ngrok.io/subscription-plan/add`, {
-          method: 'POST',
-          headers: {
-            'X-SUAVESCRIBE-TOKEN': token || 'unknown token',
-          },
-          body: JSON.stringify(payload),
-        });
+        const response = await fetch(
+          `${serverUrl}/subscription-plan/product/add`,
+          {
+            method: 'POST',
+            headers: {
+              'X-SUAVESCRIBE-TOKEN': token || 'unknown token',
+            },
+            body: JSON.stringify(payload),
+          }
+        );
         console.log(response);
         // If the server responds with an OK status, then refresh the UI and close the modal
         // Upon completion, call done() to trigger a reload of the resource page
@@ -121,7 +169,14 @@ function Add() {
       content: 'Cancel',
       onAction: () => close(),
     });
-  }, [getSessionToken, close, done, setPrimaryAction, setSecondaryAction]);
+  }, [
+    getSessionToken,
+    close,
+    done,
+    setPrimaryAction,
+    setSecondaryAction,
+    selectedPlans,
+  ]);
 
   return (
     <>
@@ -131,6 +186,23 @@ function Add() {
       </Text>
 
       <Stack>
+        {allPlans.length > 0
+          ? allPlans.map(plan => (
+              <Checkbox
+                key={plan.id}
+                label={plan.name}
+                onChange={checked => {
+                  const plans = checked
+                    ? selectedPlans.concat(plan.id)
+                    : selectedPlans.filter(id => id !== plan.id);
+                  setSelectedPlans(plans);
+                }}
+                checked={selectedPlans.includes(plan.id)}
+              />
+            ))
+          : 'Loading ...'}
+      </Stack>
+      {/* <Stack>
         {mockPlans.map((plan) => (
           <Checkbox
             key={plan.id}
@@ -144,7 +216,7 @@ function Add() {
             checked={selectedPlans.includes(plan.id)}
           />
         ))}
-      </Stack>
+      </Stack> */}
     </>
   );
 }
@@ -163,7 +235,7 @@ function Create() {
     return translations[locale] || translations.en;
   }, [locale]);
 
-  const {getSessionToken} = useSessionToken();
+  const { getSessionToken } = useSessionToken();
 
   // Mock plan settings
   const [planTitle, setPlanTitle] = useState('');
@@ -175,16 +247,24 @@ function Create() {
 
     // Here, send the form data to your app server to create the new plan.
     // The product and variant ID's collected from the modal form.
-    let payload = {
+    interface CreatePayload {
+      productId: string;
+      variantId?: string;
+      planTitle: string;
+      percentageOff: string;
+      deliveryFrequency: string;
+    }
+
+    let payload: CreatePayload = {
       productId: data.productId,
       variantId: data.variantId,
       planTitle: planTitle,
       percentageOff: percentageOff,
-      deliveryFrequency: deliveryFrequency
+      deliveryFrequency: deliveryFrequency,
     };
-    
+
     // Send the form data to your app server to create the new plan.
-    const response = await fetch(`https://f70e0c86b79d.ngrok.io/subscription-plan/create`, {
+    const response = await fetch(`${serverUrl}/subscription-plan/create`, {
       method: 'POST',
       headers: {
         'X-SUAVESCRIBE-TOKEN': token || 'unknown token',
@@ -215,7 +295,7 @@ function Create() {
     ),
     [onPrimaryAction, close]
   );
-  
+
   useEffect(() => {
     console.log(planTitle, '- has changed');
     console.log(planTitle);
@@ -278,7 +358,7 @@ function Remove() {
     return translations[locale] || translations.en;
   }, [locale]);
 
-  const {getSessionToken} = useSessionToken();
+  const { getSessionToken } = useSessionToken();
 
   useEffect(() => {
     setPrimaryAction({
@@ -288,24 +368,37 @@ function Remove() {
 
         // Here, send the form data to your app server to remove the product from the plan.
         // The product ID, variant ID, variantIds, and the selling plan group ID
-        let payload = {
+        interface RemovePayload {
+          sellingPlanGroupId: string;
+          productId: string;
+          variantId?: string;
+          variantIds?: string[];
+        }
+
+        let payload: RemovePayload = {
           sellingPlanGroupId: data.sellingPlanGroupId,
           productId: data.productId,
           variantId: data.variantId,
           variantIds: data.variantIds,
         };
-        
-        // Here, send the form data to your app server to add the product to an existing plan.
-        const response = await fetch(`https://f70e0c86b79d.ngrok.io/subscription-plan/remove`, {
-          method: 'POST',
-          headers: {
-            'X-SUAVESCRIBE-TOKEN': token || 'unknown token',
-          },
-          body: JSON.stringify(payload),
-        });
+
+        console.log(payload);
+
+        const response = await fetch(
+          `${serverUrl}/subscription-plan/product/remove`,
+          {
+            method: 'POST',
+            headers: {
+              'X-SUAVESCRIBE-TOKEN': token || 'unknown token',
+            },
+            body: JSON.stringify(payload),
+          }
+        );
         console.log(response);
         // If the server responds with an OK status, then refresh the UI and close the modal
         if (response.ok) {
+          console.log('THE REMOVED PRODUCT IDS');
+          console.log(response);
           done();
         } else {
           console.log('Handle error.');
@@ -337,13 +430,14 @@ function Remove() {
 // [Shopify admin renders this mode inside an app overlay container]
 function Edit() {
   const data = useData<'Admin::Product::SubscriptionPlan::Edit'>();
-  const [planTitle, setPlanTitle] = useState('Current plan');
+  const [currentPlan, setCurrentPlan] = useState('');
+  const [planTitle, setPlanTitle] = useState('');
   const locale = useLocale();
   const localizedStrings: Translations = useMemo(() => {
     return translations[locale] || translations.en;
   }, [locale]);
 
-  const {getSessionToken} = useSessionToken();
+  const { getSessionToken } = useSessionToken();
 
   const [percentageOff, setPercentageOff] = useState('10');
   const [deliveryFrequency, setDeliveryFrequency] = useState('1');
@@ -352,19 +446,57 @@ function Edit() {
     done,
   } = useContainer<'Admin::Product::SubscriptionPlan::Edit'>();
 
-  const onPrimaryAction = useCallback(async () => {
+  // Get Plan to Edit
+  const getCurrentPlan = async () => {
     const token = await getSessionToken();
-
-    // Here, send the form data to your app server to modify the selling plan.
-    // The product ID and variant ID collected from the modal form and the selling plan group ID
+    console.log('GETTING PLAN TO EDIT');
     let payload = {
       sellingPlanGroupId: data.sellingPlanGroupId,
       productId: data.productId,
       variantId: data.variantId,
     };
+    const response = await fetch(`${serverUrl}/subscription-plan/get`, {
+      method: 'POST',
+      headers: {
+        'X-SUAVESCRIBE-TOKEN': token || 'unknown token',
+      },
+      body: JSON.stringify(payload),
+    });
+    const selectedPlan = await response.json();
+    console.log('THE RESPONSE');
+    console.log(selectedPlan);
+    // set title for now
+    // still need to figure out how to grab selling plans
+    // set state
+    setCurrentPlan(selectedPlan);
+    setPlanTitle(selectedPlan.name);
+  };
+
+  useEffect(() => {
+    getCurrentPlan();
+  }, []);
+
+  const onPrimaryAction = useCallback(async () => {
+    const token = await getSessionToken();
+
+    // Here, send the form data to your app server to modify the selling plan.
+    // The product ID and variant ID collected from the modal form and the selling plan group ID
+    interface EditPayload {
+      sellingPlanGroupId: string;
+      productId: string;
+      variantId?: string;
+      planTitle: string;
+    }
+
+    let payload: EditPayload = {
+      sellingPlanGroupId: data.sellingPlanGroupId,
+      productId: data.productId,
+      variantId: data.variantId,
+      planTitle: planTitle,
+    };
 
     // Here, send the form data to your app server to add the product to an existing plan.
-    const response = await fetch(`https://f70e0c86b79d.ngrok.io/subscription-plan/edit`, {
+    const response = await fetch(`${serverUrl}/subscription-plan/edit`, {
       method: 'POST',
       headers: {
         'X-SUAVESCRIBE-TOKEN': token || 'unknown token',
@@ -379,7 +511,7 @@ function Edit() {
       console.log('Handle error.');
     }
     close();
-  }, [getSessionToken, done]);
+  }, [getSessionToken, done, planTitle, percentageOff, deliveryFrequency]);
 
   const cachedActions = useMemo(
     () => (
