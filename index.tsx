@@ -124,7 +124,13 @@ function Add() {
         // Upon completion, call done() to trigger a reload of the resource page
         // and terminate the extension.
         // The product and variant ID's collected from the modal form
-        let payload = {
+        interface AddPayload {
+          productId: string;
+          variantId?: string;
+          selectedPlans: string[];
+        }
+        
+        let payload: AddPayload = {
           productId: data.productId,
           variantId: data.variantId,
           selectedPlans: selectedPlans
@@ -227,7 +233,15 @@ function Create() {
 
     // Here, send the form data to your app server to create the new plan.
     // The product and variant ID's collected from the modal form.
-    let payload = {
+    interface CreatePayload {
+      productId: string;
+      variantId?: string;
+      planTitle: string;
+      percentageOff: string;
+      deliveryFrequency: string;
+    }
+    
+    let payload: CreatePayload = {
       productId: data.productId,
       variantId: data.variantId,
       planTitle: planTitle,
@@ -340,7 +354,14 @@ function Remove() {
 
         // Here, send the form data to your app server to remove the product from the plan.
         // The product ID, variant ID, variantIds, and the selling plan group ID
-        let payload = {
+        interface RemovePayload {
+          sellingPlanGroupId: string;
+          productId: string;
+          variantId?: string;
+          variantIds?: string[];
+        }
+        
+        let payload: RemovePayload = {
           sellingPlanGroupId: data.sellingPlanGroupId,
           productId: data.productId,
           variantId: data.variantId,
@@ -443,7 +464,14 @@ function Edit() {
 
     // Here, send the form data to your app server to modify the selling plan.
     // The product ID and variant ID collected from the modal form and the selling plan group ID
-    let payload = {
+    interface EditPayload {
+      sellingPlanGroupId: string;
+      productId: string;
+      variantId?: string;
+      planTitle: string;
+    }
+    
+    let payload: EditPayload = {
       sellingPlanGroupId: data.sellingPlanGroupId,
       productId: data.productId,
       variantId: data.variantId,
