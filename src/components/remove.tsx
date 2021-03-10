@@ -6,26 +6,7 @@ import {
   useLocale,
   useSessionToken,
 } from '@shopify/argo-admin-react';
-
-interface Translations {
-  [key: string]: string;
-}
-
-const translations: {
-  [locale: string]: Translations;
-} = {
-  de: {
-    hello: 'Guten Tag',
-  },
-  en: {
-    hello: 'Hello',
-  },
-  fr: {
-    hello: 'Bonjour',
-  },
-};
-
-const serverUrl = 'https://eab73c93d01c.ngrok.io';
+import { Translations, translations, serverUrl } from './config';
 
 // 'Remove' mode should remove the current product from a selling plan.
 // This should not delete the selling plan.
@@ -50,7 +31,6 @@ function Remove() {
       content: 'Remove from plan',
       onAction: async () => {
         const token = await getSessionToken();
-
         // Here, send the form data to your app server to remove the product from the plan.
         // The product ID, variant ID, variantIds, and the selling plan group ID
         interface RemovePayload {

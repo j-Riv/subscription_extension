@@ -11,26 +11,7 @@ import {
   useSessionToken,
 } from '@shopify/argo-admin-react';
 import Actions from './actions';
-
-interface Translations {
-  [key: string]: string;
-}
-
-const translations: {
-  [locale: string]: Translations;
-} = {
-  de: {
-    hello: 'Guten Tag',
-  },
-  en: {
-    hello: 'Hello',
-  },
-  fr: {
-    hello: 'Bonjour',
-  },
-};
-
-const serverUrl = 'https://eab73c93d01c.ngrok.io';
+import { Translations, translations, serverUrl } from './config';
 
 // 'Edit' mode should modify an existing selling plan.
 // Changes should affect other products that have this plan applied.
@@ -42,6 +23,7 @@ function Edit() {
   const [merchantCode, setMerchantCode] = useState('');
   const [planGroupOption, setPlanGroupOption] = useState('');
   const [intervalOption, setIntervalOption] = useState('Week');
+  const [percentageOff, setPercentageOff] = useState('0');
   const locale = useLocale();
   const localizedStrings: Translations = useMemo(() => {
     return translations[locale] || translations.en;
@@ -49,8 +31,6 @@ function Edit() {
 
   const { getSessionToken } = useSessionToken();
 
-  const [percentageOff, setPercentageOff] = useState('10');
-  const [deliveryFrequency, setDeliveryFrequency] = useState('1');
   const {
     close,
     done,

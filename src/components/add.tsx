@@ -8,26 +8,7 @@ import {
   useLocale,
   useSessionToken,
 } from '@shopify/argo-admin-react';
-
-interface Translations {
-  [key: string]: string;
-}
-
-const translations: {
-  [locale: string]: Translations;
-} = {
-  de: {
-    hello: 'Guten Tag',
-  },
-  en: {
-    hello: 'Hello',
-  },
-  fr: {
-    hello: 'Bonjour',
-  },
-};
-
-const serverUrl = 'https://eab73c93d01c.ngrok.io';
+import { Translations, translations, serverUrl } from './config';
 
 // 'Add' mode should allow a user to add the current product to an existing selling plan
 // [Shopify admin renders this mode inside a modal container]
@@ -73,16 +54,20 @@ function Add() {
     console.log('THE RESPONSE');
     console.log(planGroups);
     const planData = [];
-    planGroups.forEach(plans => {
-      console.log('Plan: ', plans.node.name);
-      console.log('Plan ID: ', plans.node.id);
-      // set state
-      planData.push({ name: plans.node.name, id: plans.node.id });
-      plans.node.sellingPlans.edges.forEach(sellingPlan => {
-        console.log('Selling Plan: ', sellingPlan.node.name);
-        console.log('Selling Plan ID: ', sellingPlan.node.id);
-      });
-    });
+    planGroups.forEach(
+      (plans: {
+        node: { name: any; id: any; sellingPlans: { edges: any[] } };
+      }) => {
+        console.log('Plan: ', plans.node.name);
+        console.log('Plan ID: ', plans.node.id);
+        // set state
+        planData.push({ name: plans.node.name, id: plans.node.id });
+        plans.node.sellingPlans.edges.forEach(sellingPlan => {
+          console.log('Selling Plan: ', sellingPlan.node.name);
+          console.log('Selling Plan ID: ', sellingPlan.node.id);
+        });
+      }
+    );
     // set state
     setAllPlans(planData);
   };

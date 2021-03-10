@@ -11,26 +11,7 @@ import {
   useSessionToken,
 } from '@shopify/argo-admin-react';
 import Actions from './actions';
-
-interface Translations {
-  [key: string]: string;
-}
-
-const translations: {
-  [locale: string]: Translations;
-} = {
-  de: {
-    hello: 'Guten Tag',
-  },
-  en: {
-    hello: 'Hello',
-  },
-  fr: {
-    hello: 'Bonjour',
-  },
-};
-
-const serverUrl = 'https://eab73c93d01c.ngrok.io';
+import { Translations, translations, serverUrl } from './config';
 
 // 'Create' mode should create a new selling plan, and add the current product to it
 // [Shopify admin renders this mode inside an app overlay container]
@@ -51,8 +32,6 @@ function Create() {
   // Mock plan settings
   const [planTitle, setPlanTitle] = useState('');
   const [percentageOff, setPercentageOff] = useState('');
-  const [deliveryFrequency, setDeliveryFrequency] = useState('');
-  // const [options, setOptions] = useState('');
   const [merchantCode, setMerchantCode] = useState('');
   const [planGroupOption, setPlanGroupOption] = useState('');
   const [intervalOption, setIntervalOption] = useState('WEEK');
@@ -97,9 +76,6 @@ function Create() {
       body: JSON.stringify(payload),
     });
     console.log(response);
-    // const json = await response.json();
-    // console.log('JSON RESPONSE');
-    // console.log(json);
     // If the server responds with an OK status, then refresh the UI and close the modal
     if (response.ok) {
       done();
