@@ -5,6 +5,7 @@ import {
   Checkbox,
   TextField,
   Text,
+  Select,
   Stack,
   extend,
   render,
@@ -74,11 +75,6 @@ function Add() {
 
   const [selectedPlans, setSelectedPlans] = useState<string[]>([]);
   const [allPlans, setAllPlans] = useState<any[]>([]);
-  const mockPlans = [
-    { name: 'Subscription Plan A', id: 'a' },
-    { name: 'Subscription Plan B', id: 'b' },
-    { name: 'Subscription Plan C', id: 'c' },
-  ];
 
   // Get All Plans
   const getAllPlans = async () => {
@@ -202,21 +198,6 @@ function Add() {
             ))
           : 'Loading ...'}
       </Stack>
-      {/* <Stack>
-        {mockPlans.map((plan) => (
-          <Checkbox
-            key={plan.id}
-            label={plan.name}
-            onChange={(checked) => {
-              const plans = checked
-                ? selectedPlans.concat(plan.id)
-                : selectedPlans.filter((id) => id !== plan.id);
-              setSelectedPlans(plans);
-            }}
-            checked={selectedPlans.includes(plan.id)}
-          />
-        ))}
-      </Stack> */}
     </>
   );
 }
@@ -241,6 +222,11 @@ function Create() {
   const [planTitle, setPlanTitle] = useState('');
   const [percentageOff, setPercentageOff] = useState('');
   const [deliveryFrequency, setDeliveryFrequency] = useState('');
+  // const [options, setOptions] = useState('');
+  const [merchantCode, setMerchantCode] = useState('');
+  const [planGroupOption, setPlanGroupOption] = useState('');
+  const [intervalOption, setIntervalOption] = useState('WEEK');
+  const [numberOfPlans, setNumberOfPlans] = useState('1');
 
   const onPrimaryAction = useCallback(async () => {
     const token = await getSessionToken();
@@ -252,7 +238,10 @@ function Create() {
       variantId?: string;
       planTitle: string;
       percentageOff: string;
-      deliveryFrequency: string;
+      merchantCode: string;
+      intervalOption: string;
+      numberOfPlans: string;
+      planGroupOption: string;
     }
 
     let payload: CreatePayload = {
@@ -260,8 +249,14 @@ function Create() {
       variantId: data.variantId,
       planTitle: planTitle,
       percentageOff: percentageOff,
-      deliveryFrequency: deliveryFrequency,
+      merchantCode: merchantCode,
+      intervalOption: intervalOption,
+      numberOfPlans: numberOfPlans,
+      planGroupOption: planGroupOption,
     };
+
+    console.log('THE PAYLOAD');
+    console.log(payload);
 
     // Send the form data to your app server to create the new plan.
     const response = await fetch(`${serverUrl}/subscription-plan/create`, {
@@ -283,7 +278,16 @@ function Create() {
     }
 
     close();
-  }, [getSessionToken, done, planTitle, percentageOff, deliveryFrequency]);
+  }, [
+    getSessionToken,
+    done,
+    planTitle,
+    percentageOff,
+    merchantCode,
+    intervalOption,
+    numberOfPlans,
+    planGroupOption,
+  ]);
 
   const cachedActions = useMemo(
     () => (
@@ -318,15 +322,44 @@ function Create() {
           value={planTitle}
           onChange={setPlanTitle}
         />
+        <TextField
+          label="Merchant code"
+          value={merchantCode}
+          onChange={setMerchantCode}
+        />
+        <TextField
+          label="Options"
+          value={planGroupOption}
+          onChange={setPlanGroupOption}
+        />
       </Card>
 
       <Card title="Delivery and discount" sectioned>
         <Stack>
-          <TextField
-            type="number"
-            label="Delivery frequency (in weeks)"
-            value={deliveryFrequency}
-            onChange={setDeliveryFrequency}
+          <Select
+            label="Interval"
+            options={[
+              {
+                label: 'Weekly',
+                value: 'WEEK',
+              },
+              {
+                label: 'Monthly',
+                value: 'MONTH',
+              },
+            ]}
+            onChange={setIntervalOption}
+            value={intervalOption}
+          />
+          <Select
+            label="Max Number Weeks / Months"
+            options={[
+              { label: '1', value: '1' },
+              { label: '2', value: '2' },
+              { label: '3', value: '3' },
+            ]}
+            onChange={setNumberOfPlans}
+            value={numberOfPlans}
           />
           <TextField
             type="number"
@@ -336,7 +369,6 @@ function Create() {
           />
         </Stack>
       </Card>
-
       {cachedActions}
     </>
   );
@@ -430,8 +462,11 @@ function Remove() {
 // [Shopify admin renders this mode inside an app overlay container]
 function Edit() {
   const data = useData<'Admin::Product::SubscriptionPlan::Edit'>();
-  const [currentPlan, setCurrentPlan] = useState('');
+  const [sellingPlans, setSellingPlans] = useState('');
   const [planTitle, setPlanTitle] = useState('');
+  const [merchantCode, setMerchantCode] = useState('');
+  const [planGroupOption, setPlanGroupOption] = useState('');
+  const [intervalOption, setIntervalOption] = useState('Week');
   const locale = useLocale();
   const localizedStrings: Translations = useMemo(() => {
     return translations[locale] || translations.en;
@@ -465,11 +500,15 @@ function Edit() {
     const selectedPlan = await response.json();
     console.log('THE RESPONSE');
     console.log(selectedPlan);
+
     // set title for now
     // still need to figure out how to grab selling plans
     // set state
-    setCurrentPlan(selectedPlan);
     setPlanTitle(selectedPlan.name);
+    setMerchantCode(selectedPlan.merchantCode);
+    setPlanGroupOption(selectedPlan.options[0]);
+    setPercentageOff(selectedPlan.percentageOff.toString());
+    setSellingPlans(selectedPlan.sellingPlans);
   };
 
   useEffect(() => {
@@ -486,6 +525,11 @@ function Edit() {
       productId: string;
       variantId?: string;
       planTitle: string;
+      percentageOff: string;
+      merchantCode: string;
+      intervalOption: string;
+      planGroupOption: string;
+      sellingPlans: any;
     }
 
     let payload: EditPayload = {
@@ -493,6 +537,11 @@ function Edit() {
       productId: data.productId,
       variantId: data.variantId,
       planTitle: planTitle,
+      percentageOff: percentageOff,
+      merchantCode: merchantCode,
+      intervalOption: intervalOption,
+      planGroupOption: planGroupOption,
+      sellingPlans: sellingPlans,
     };
 
     // Here, send the form data to your app server to add the product to an existing plan.
@@ -511,7 +560,16 @@ function Edit() {
       console.log('Handle error.');
     }
     close();
-  }, [getSessionToken, done, planTitle, percentageOff, deliveryFrequency]);
+  }, [
+    getSessionToken,
+    done,
+    planTitle,
+    percentageOff,
+    merchantCode,
+    intervalOption,
+    planGroupOption,
+    sellingPlans,
+  ]);
 
   const cachedActions = useMemo(
     () => (
@@ -537,15 +595,34 @@ function Edit() {
           value={planTitle}
           onChange={setPlanTitle}
         />
+        <TextField
+          label="Merchant code"
+          value={merchantCode}
+          onChange={setMerchantCode}
+        />
+        <TextField
+          label="Options"
+          value={planGroupOption}
+          onChange={setPlanGroupOption}
+        />
       </Card>
 
       <Card title="Delivery and discount" sectioned>
         <Stack>
-          <TextField
-            type="number"
-            label="Delivery frequency (in weeks)"
-            value={deliveryFrequency}
-            onChange={setDeliveryFrequency}
+          <Select
+            label="Interval"
+            options={[
+              {
+                label: 'Weekly',
+                value: 'WEEK',
+              },
+              {
+                label: 'Monthly',
+                value: 'MONTH',
+              },
+            ]}
+            onChange={setIntervalOption}
+            value={intervalOption}
           />
           <TextField
             type="number"
