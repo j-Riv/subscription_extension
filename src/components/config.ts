@@ -16,4 +16,5 @@ export const translations: {
   },
 };
 
+// This is tempororary will move for production
 export const serverUrl = 'https://eab73c93d01c.ngrok.io';
