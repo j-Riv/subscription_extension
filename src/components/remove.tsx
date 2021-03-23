@@ -28,7 +28,7 @@ function Remove() {
 
   useEffect(() => {
     setPrimaryAction({
-      content: 'Remove from plan',
+      content: 'Remove From Plan',
       onAction: async () => {
         const token = await getSessionToken();
         // Here, send the form data to your app server to remove the product from the plan.
@@ -47,8 +47,6 @@ function Remove() {
           variantIds: data.variantIds,
         };
 
-        console.log(payload);
-
         const response = await fetch(
           `${serverUrl}/subscription-plan/product/remove`,
           {
@@ -59,11 +57,9 @@ function Remove() {
             body: JSON.stringify(payload),
           }
         );
-        console.log(response);
+
         // If the server responds with an OK status, then refresh the UI and close the modal
         if (response.ok) {
-          console.log('THE REMOVED PRODUCT IDS');
-          console.log(response);
           done();
         } else {
           console.log('Handle error.');
@@ -81,7 +77,6 @@ function Remove() {
 
   return (
     <>
-      <Text size="titleLarge">{localizedStrings.hello}!</Text>
       <Text>
         Remove Product id {data.productId} from Plan group id{' '}
         {data.sellingPlanGroupId}

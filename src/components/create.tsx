@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import {
   Card,
   TextField,
@@ -30,12 +30,13 @@ function Create() {
   const { getSessionToken } = useSessionToken();
 
   // Mock plan settings
-  const [planTitle, setPlanTitle] = useState('');
-  const [percentageOff, setPercentageOff] = useState('');
-  const [merchantCode, setMerchantCode] = useState('');
-  const [planGroupOption, setPlanGroupOption] = useState('');
-  const [intervalOption, setIntervalOption] = useState('WEEK');
-  const [numberOfPlans, setNumberOfPlans] = useState('1');
+  const [error, setError] = useState<boolean>(false);
+  const [planTitle, setPlanTitle] = useState<string>('');
+  const [percentageOff, setPercentageOff] = useState<string>('5');
+  const [merchantCode, setMerchantCode] = useState<string>('');
+  const [planGroupOption, setPlanGroupOption] = useState<string>('');
+  const [intervalOption, setIntervalOption] = useState<string>('WEEK');
+  const [numberOfPlans, setNumberOfPlans] = useState<string>('1');
 
   const onPrimaryAction = useCallback(async () => {
     const token = await getSessionToken();
@@ -64,9 +65,6 @@ function Create() {
       planGroupOption: planGroupOption,
     };
 
-    console.log('THE PAYLOAD');
-    console.log(payload);
-
     // Send the form data to your app server to create the new plan.
     const response = await fetch(`${serverUrl}/subscription-plan/create`, {
       method: 'POST',
@@ -75,12 +73,12 @@ function Create() {
       },
       body: JSON.stringify(payload),
     });
-    console.log(response);
     // If the server responds with an OK status, then refresh the UI and close the modal
     if (response.ok) {
       done();
     } else {
       console.log('Handle error.');
+      setError(true);
     }
 
     close();
@@ -106,30 +104,26 @@ function Create() {
     [onPrimaryAction, close]
   );
 
-  useEffect(() => {
-    console.log(planTitle, '- has changed');
-    console.log(planTitle);
-  }, [planTitle]);
-
   return (
     <>
       <Stack spacing="none">
-        <Text size="titleLarge">
-          {localizedStrings.hello}! Create subscription plan
-        </Text>
+        <Text size="titleLarge">Create Subscription Plan</Text>
       </Stack>
 
-      <Card
-        title={`Create subscription plan for Product id ${data.productId}`}
-        sectioned
-      >
+      {error && (
+        <Text color="error">
+          There has been a problem, please try again later...
+        </Text>
+      )}
+
+      <Card title="Create a Subscription Plan" sectioned>
         <TextField
-          label="Plan title"
+          label="Plan Title"
           value={planTitle}
           onChange={setPlanTitle}
         />
         <TextField
-          label="Merchant code"
+          label="Merchant Code"
           value={merchantCode}
           onChange={setMerchantCode}
         />
@@ -140,7 +134,7 @@ function Create() {
         />
       </Card>
 
-      <Card title="Delivery and discount" sectioned>
+      <Card title="Delivery and Discount" sectioned>
         <Stack>
           <Select
             label="Interval"
@@ -169,7 +163,7 @@ function Create() {
           />
           <TextField
             type="number"
-            label="Percentage off (%)"
+            label="Percentage Off (%)"
             value={percentageOff}
             onChange={setPercentageOff}
           />
