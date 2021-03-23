@@ -128,7 +128,7 @@ function Edit() {
 
   const cachedActions = useMemo(
     () => (
-      <Actions onPrimary={onPrimaryAction} onClose={close} title="Edit plan" />
+      <Actions onPrimary={onPrimaryAction} onClose={close} title="Edit Plan" />
     ),
     [onPrimaryAction, close]
   );
@@ -146,12 +146,12 @@ function Edit() {
         sectioned
       >
         <TextField
-          label="Plan title"
+          label="Plan Title"
           value={planTitle}
           onChange={setPlanTitle}
         />
         <TextField
-          label="Merchant code"
+          label="Merchant Code"
           value={merchantCode}
           onChange={setMerchantCode}
         />
@@ -162,7 +162,7 @@ function Edit() {
         />
       </Card>
 
-      <Card title="Delivery and discount" sectioned>
+      <Card title="Delivery and Discount" sectioned>
         <Stack>
           <Select
             label="Interval"
@@ -181,7 +181,7 @@ function Edit() {
           />
           <TextField
             type="number"
-            label="Percentage off (%)"
+            label="Percentage Off (%)"
             value={percentageOff}
             onChange={setPercentageOff}
           />

@@ -31,7 +31,7 @@ function Create() {
 
   // Mock plan settings
   const [planTitle, setPlanTitle] = useState('');
-  const [percentageOff, setPercentageOff] = useState('');
+  const [percentageOff, setPercentageOff] = useState('5');
   const [merchantCode, setMerchantCode] = useState('');
   const [planGroupOption, setPlanGroupOption] = useState('');
   const [intervalOption, setIntervalOption] = useState('WEEK');
@@ -114,22 +114,20 @@ function Create() {
   return (
     <>
       <Stack spacing="none">
-        <Text size="titleLarge">
-          {localizedStrings.hello}! Create subscription plan
-        </Text>
+        <Text size="titleLarge">Create Subscription Plan</Text>
       </Stack>
 
       <Card
-        title={`Create subscription plan for Product id ${data.productId}`}
+        title={`Create Subscription Plan for Product: ${data.productId}`}
         sectioned
       >
         <TextField
-          label="Plan title"
+          label="Plan Title"
           value={planTitle}
           onChange={setPlanTitle}
         />
         <TextField
-          label="Merchant code"
+          label="Merchant Code"
           value={merchantCode}
           onChange={setMerchantCode}
         />
@@ -140,7 +138,7 @@ function Create() {
         />
       </Card>
 
-      <Card title="Delivery and discount" sectioned>
+      <Card title="Delivery and Discount" sectioned>
         <Stack>
           <Select
             label="Interval"
@@ -169,7 +167,7 @@ function Create() {
           />
           <TextField
             type="number"
-            label="Percentage off (%)"
+            label="Percentage Off (%)"
             value={percentageOff}
             onChange={setPercentageOff}
           />

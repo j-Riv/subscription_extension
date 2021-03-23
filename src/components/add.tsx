@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import {
   Checkbox,
   Text,
+  Spinner,
   Stack,
   useData,
   useContainer,
@@ -144,27 +145,28 @@ function Add() {
 
   return (
     <>
-      <Text size="titleLarge">{localizedStrings.hello}!</Text>
-      <Text>
+      <Text size="titleSmall">
         Add Product id {data.productId} to an existing plan or existing plans
       </Text>
 
       <Stack>
-        {allPlans.length > 0
-          ? allPlans.map(plan => (
-              <Checkbox
-                key={plan.id}
-                label={plan.name}
-                onChange={checked => {
-                  const plans = checked
-                    ? selectedPlans.concat(plan.id)
-                    : selectedPlans.filter(id => id !== plan.id);
-                  setSelectedPlans(plans);
-                }}
-                checked={selectedPlans.includes(plan.id)}
-              />
-            ))
-          : 'Loading ...'}
+        {allPlans.length > 0 ? (
+          allPlans.map(plan => (
+            <Checkbox
+              key={plan.id}
+              label={plan.name}
+              onChange={checked => {
+                const plans = checked
+                  ? selectedPlans.concat(plan.id)
+                  : selectedPlans.filter(id => id !== plan.id);
+                setSelectedPlans(plans);
+              }}
+              checked={selectedPlans.includes(plan.id)}
+            />
+          ))
+        ) : (
+          <Spinner />
+        )}
       </Stack>
     </>
   );

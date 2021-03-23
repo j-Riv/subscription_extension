@@ -28,7 +28,7 @@ function Remove() {
 
   useEffect(() => {
     setPrimaryAction({
-      content: 'Remove from plan',
+      content: 'Remove From Plan',
       onAction: async () => {
         const token = await getSessionToken();
         // Here, send the form data to your app server to remove the product from the plan.
