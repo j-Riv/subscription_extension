@@ -117,10 +117,7 @@ function Create() {
         <Text size="titleLarge">Create Subscription Plan</Text>
       </Stack>
 
-      <Card
-        title={`Create Subscription Plan for Product: ${data.productId}`}
-        sectioned
-      >
+      <Card title="Create a Subscription Plan" sectioned>
         <TextField
           label="Plan Title"
           value={planTitle}

@@ -145,9 +145,7 @@ function Add() {
 
   return (
     <>
-      <Text size="titleSmall">
-        Add Product id {data.productId} to an existing plan or existing plans
-      </Text>
+      <Text size="titleSmall">Add Product to an existing plan or plans.</Text>
 
       <Stack>
         {allPlans.length > 0 ? (

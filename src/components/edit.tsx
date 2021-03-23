@@ -4,6 +4,7 @@ import {
   TextField,
   Text,
   Select,
+  Spinner,
   Stack,
   useData,
   useContainer,
@@ -18,11 +19,12 @@ import { Translations, translations, serverUrl } from './config';
 // [Shopify admin renders this mode inside an app overlay container]
 function Edit() {
   const data = useData<'Admin::Product::SubscriptionPlan::Edit'>();
+  const [loading, setLoading] = useState<boolean>(true);
   const [sellingPlans, setSellingPlans] = useState('');
   const [planTitle, setPlanTitle] = useState('');
   const [merchantCode, setMerchantCode] = useState('');
   const [planGroupOption, setPlanGroupOption] = useState('');
-  const [intervalOption, setIntervalOption] = useState('Week');
+  const [intervalOption, setIntervalOption] = useState('');
   const [percentageOff, setPercentageOff] = useState('0');
   const locale = useLocale();
   const localizedStrings: Translations = useMemo(() => {
@@ -64,6 +66,8 @@ function Edit() {
     setPlanGroupOption(selectedPlan.options[0]);
     setPercentageOff(selectedPlan.percentageOff.toString());
     setSellingPlans(selectedPlan.sellingPlans);
+    setIntervalOption(selectedPlan.interval);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -136,57 +140,63 @@ function Edit() {
   return (
     <>
       <Stack spacing="none">
-        <Text size="titleLarge">
-          {localizedStrings.hello}! Edit subscription plan
-        </Text>
+        <Text size="titleLarge">Edit Subscription Plan</Text>
       </Stack>
 
-      <Card
-        title={`Edit subscription plan for Product id ${data.productId}`}
-        sectioned
-      >
-        <TextField
-          label="Plan Title"
-          value={planTitle}
-          onChange={setPlanTitle}
-        />
-        <TextField
-          label="Merchant Code"
-          value={merchantCode}
-          onChange={setMerchantCode}
-        />
-        <TextField
-          label="Options"
-          value={planGroupOption}
-          onChange={setPlanGroupOption}
-        />
-      </Card>
+      {loading ? (
+        <Card sectioned>
+          <Spinner />
+        </Card>
+      ) : (
+        <>
+          <Card
+            title={`Edit subscription plan for Product id ${data.productId}`}
+            sectioned
+          >
+            <TextField
+              label="Plan Title"
+              value={planTitle}
+              onChange={setPlanTitle}
+            />
+            <TextField
+              label="Merchant Code"
+              value={merchantCode}
+              onChange={setMerchantCode}
+            />
+            <TextField
+              label="Options"
+              value={planGroupOption}
+              onChange={setPlanGroupOption}
+            />
+          </Card>
 
-      <Card title="Delivery and Discount" sectioned>
-        <Stack>
-          <Select
-            label="Interval"
-            options={[
-              {
-                label: 'Weekly',
-                value: 'WEEK',
-              },
-              {
-                label: 'Monthly',
-                value: 'MONTH',
-              },
-            ]}
-            onChange={setIntervalOption}
-            value={intervalOption}
-          />
-          <TextField
-            type="number"
-            label="Percentage Off (%)"
-            value={percentageOff}
-            onChange={setPercentageOff}
-          />
-        </Stack>
-      </Card>
+          <Card title="Delivery and Discount" sectioned>
+            <Stack>
+              <Select
+                label="Interval"
+                options={[
+                  {
+                    label: 'Weekly',
+                    value: 'WEEK',
+                  },
+                  {
+                    label: 'Monthly',
+                    value: 'MONTH',
+                  },
+                ]}
+                onChange={setIntervalOption}
+                value={intervalOption}
+              />
+              <TextField
+                type="number"
+                label="Percentage Off (%)"
+                value={percentageOff}
+                onChange={setPercentageOff}
+              />
+            </Stack>
+          </Card>
+        </>
+      )}
 
       {cachedActions}
     </>

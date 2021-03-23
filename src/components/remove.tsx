@@ -81,7 +81,6 @@ function Remove() {
 
   return (
     <>
-      <Text size="titleLarge">{localizedStrings.hello}!</Text>
       <Text>
         Remove Product id {data.productId} from Plan group id{' '}
         {data.sellingPlanGroupId}
