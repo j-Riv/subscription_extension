@@ -20,12 +20,13 @@ import { Translations, translations, serverUrl } from './config';
 function Edit() {
   const data = useData<'Admin::Product::SubscriptionPlan::Edit'>();
   const [loading, setLoading] = useState<boolean>(true);
-  const [sellingPlans, setSellingPlans] = useState('');
-  const [planTitle, setPlanTitle] = useState('');
-  const [merchantCode, setMerchantCode] = useState('');
-  const [planGroupOption, setPlanGroupOption] = useState('');
-  const [intervalOption, setIntervalOption] = useState('');
-  const [percentageOff, setPercentageOff] = useState('0');
+  const [error, setError] = useState<boolean>(false);
+  const [sellingPlans, setSellingPlans] = useState<string>('');
+  const [planTitle, setPlanTitle] = useState<string>('');
+  const [merchantCode, setMerchantCode] = useState<string>('');
+  const [planGroupOption, setPlanGroupOption] = useState<string>('');
+  const [intervalOption, setIntervalOption] = useState<string>('');
+  const [percentageOff, setPercentageOff] = useState<string>('0');
   const locale = useLocale();
   const localizedStrings: Translations = useMemo(() => {
     return translations[locale] || translations.en;
@@ -41,7 +42,6 @@ function Edit() {
   // Get Plan to Edit
   const getCurrentPlan = async () => {
     const token = await getSessionToken();
-    console.log('GETTING PLAN TO EDIT');
     let payload = {
       sellingPlanGroupId: data.sellingPlanGroupId,
       productId: data.productId,
@@ -55,8 +55,6 @@ function Edit() {
       body: JSON.stringify(payload),
     });
     const selectedPlan = await response.json();
-    console.log('THE RESPONSE');
-    console.log(selectedPlan);
 
     // set title for now
     // still need to figure out how to grab selling plans
@@ -111,12 +109,13 @@ function Edit() {
       },
       body: JSON.stringify(payload),
     });
-    console.log(response);
+
     // If the server responds with an OK status, then refresh the UI and close the modal
     if (response.ok) {
       done();
     } else {
       console.log('Handle error.');
+      setError(true);
     }
     close();
   }, [
@@ -142,6 +141,12 @@ function Edit() {
       <Stack spacing="none">
         <Text size="titleLarge">Edit Subscription Plan</Text>
       </Stack>
+
+      {error && (
+        <Text color="error">
+          There has been a problem, please try again later...
+        </Text>
+      )}
 
       {loading ? (
         <Card sectioned>
