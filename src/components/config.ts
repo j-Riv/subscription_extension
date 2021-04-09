@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 export interface Translations {
   [key: string]: string;
 }
@@ -17,4 +20,4 @@ export const translations: {
 };
 
 // This is tempororary will move for production
-export const serverUrl = 'https://bc245e5262c3.ngrok.io';
+export const serverUrl = process.env.SHOPIFY_APP_SERVER_URL;
