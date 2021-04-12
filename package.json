@@ -19,7 +19,6 @@
   },
   "dependencies": {
     "@shopify/argo-admin-react": "latest",
-    "dotenv": "^8.2.0",
     "react": "^16.13.0"
   }
 }

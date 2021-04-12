@@ -6,7 +6,8 @@ import {
   useLocale,
   useSessionToken,
 } from '@shopify/argo-admin-react';
-import { Translations, translations, serverUrl } from './config';
+import { Translations, translations } from './config';
+import serverUrl from './server-url';
 
 // 'Remove' mode should remove the current product from a selling plan.
 // This should not delete the selling plan.

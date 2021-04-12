@@ -9,7 +9,8 @@ import {
   useLocale,
   useSessionToken,
 } from '@shopify/argo-admin-react';
-import { Translations, translations, serverUrl } from './config';
+import { Translations, translations } from './config';
+import serverUrl from './server-url';
 
 // 'Add' mode should allow a user to add the current product to an existing selling plan
 // [Shopify admin renders this mode inside a modal container]

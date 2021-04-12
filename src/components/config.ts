@@ -1,6 +1,3 @@
-import dotenv from 'dotenv';
-dotenv.config();
-
 export interface Translations {
   [key: string]: string;
 }
@@ -18,6 +15,3 @@ export const translations: {
     hello: 'Bonjour',
   },
 };
-
-// This is tempororary will move for production
-export const serverUrl = process.env.SHOPIFY_APP_SERVER_URL;

@@ -11,7 +11,8 @@ import {
   useSessionToken,
 } from '@shopify/argo-admin-react';
 import Actions from './actions';
-import { Translations, translations, serverUrl } from './config';
+import { Translations, translations } from './config';
+import serverUrl from './server-url';
 
 // 'Create' mode should create a new selling plan, and add the current product to it
 // [Shopify admin renders this mode inside an app overlay container]
