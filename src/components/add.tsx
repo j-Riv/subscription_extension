@@ -20,12 +20,8 @@ function Add() {
   const data = useData<'Admin::Product::SubscriptionPlan::Add'>();
 
   // The UI your extension renders inside
-  const {
-    close,
-    done,
-    setPrimaryAction,
-    setSecondaryAction,
-  } = useContainer<'Admin::Product::SubscriptionPlan::Add'>();
+  const { close, done, setPrimaryAction, setSecondaryAction } =
+    useContainer<'Admin::Product::SubscriptionPlan::Add'>();
 
   // Information about the merchant's selected language. Use this to support multiple languages.
   const locale = useLocale();
@@ -50,6 +46,8 @@ function Add() {
         method: 'POST',
         headers: {
           'X-SUAVESCRIBE-TOKEN': token || 'unknown token',
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
         },
       });
       const planGroups = await response.json();
@@ -107,6 +105,8 @@ function Add() {
             method: 'POST',
             headers: {
               'X-SUAVESCRIBE-TOKEN': token || 'unknown token',
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
             },
             body: JSON.stringify(payload),
           }

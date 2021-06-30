@@ -14,12 +14,8 @@ import serverUrl from './server-url';
 // [Shopify admin renders this mode inside a modal container]
 function Remove() {
   const data = useData<'Admin::Product::SubscriptionPlan::Remove'>();
-  const {
-    close,
-    done,
-    setPrimaryAction,
-    setSecondaryAction,
-  } = useContainer<'Admin::Product::SubscriptionPlan::Remove'>();
+  const { close, done, setPrimaryAction, setSecondaryAction } =
+    useContainer<'Admin::Product::SubscriptionPlan::Remove'>();
   const locale = useLocale();
   const localizedStrings: Translations = useMemo(() => {
     return translations[locale] || translations.en;
@@ -54,6 +50,8 @@ function Remove() {
             method: 'POST',
             headers: {
               'X-SUAVESCRIBE-TOKEN': token || 'unknown token',
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
             },
             body: JSON.stringify(payload),
           }

@@ -18,10 +18,8 @@ import serverUrl from './server-url';
 // [Shopify admin renders this mode inside an app overlay container]
 function Create() {
   const data = useData<'Admin::Product::SubscriptionPlan::Create'>();
-  const {
-    close,
-    done,
-  } = useContainer<'Admin::Product::SubscriptionPlan::Create'>();
+  const { close, done } =
+    useContainer<'Admin::Product::SubscriptionPlan::Create'>();
 
   const locale = useLocale();
   const localizedStrings: Translations = useMemo(() => {
@@ -71,6 +69,8 @@ function Create() {
       method: 'POST',
       headers: {
         'X-SUAVESCRIBE-TOKEN': token || 'unknown token',
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(payload),
     });

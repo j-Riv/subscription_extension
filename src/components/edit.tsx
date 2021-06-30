@@ -35,10 +35,8 @@ function Edit() {
 
   const { getSessionToken } = useSessionToken();
 
-  const {
-    close,
-    done,
-  } = useContainer<'Admin::Product::SubscriptionPlan::Edit'>();
+  const { close, done } =
+    useContainer<'Admin::Product::SubscriptionPlan::Edit'>();
 
   // Get Plan to Edit
   const getCurrentPlan = async () => {
@@ -52,6 +50,8 @@ function Edit() {
       method: 'POST',
       headers: {
         'X-SUAVESCRIBE-TOKEN': token || 'unknown token',
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(payload),
     });
@@ -107,6 +107,8 @@ function Edit() {
       method: 'POST',
       headers: {
         'X-SUAVESCRIBE-TOKEN': token || 'unknown token',
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(payload),
     });
