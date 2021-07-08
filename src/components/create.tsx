@@ -36,6 +36,7 @@ function Create() {
   const [planGroupOption, setPlanGroupOption] = useState<string>('');
   const [intervalOption, setIntervalOption] = useState<string>('WEEK');
   const [numberOfPlans, setNumberOfPlans] = useState<string>('1');
+  const [intervalCount, setIntervalCount] = useState<string>('1');
 
   const onPrimaryAction = useCallback(async () => {
     const token = await getSessionToken();
@@ -50,6 +51,7 @@ function Create() {
       merchantCode: string;
       intervalOption: string;
       numberOfPlans: string;
+      intervalCount: string;
       planGroupOption: string;
     }
 
@@ -61,6 +63,7 @@ function Create() {
       merchantCode: merchantCode,
       intervalOption: intervalOption,
       numberOfPlans: numberOfPlans,
+      intervalCount: intervalCount,
       planGroupOption: planGroupOption,
     };
 
@@ -91,6 +94,7 @@ function Create() {
     merchantCode,
     intervalOption,
     numberOfPlans,
+    intervalCount,
     planGroupOption,
   ]);
 
@@ -138,6 +142,17 @@ function Create() {
       <Card title="Delivery and Discount" sectioned>
         <Stack>
           <Select
+            label="Number of Plans"
+            options={[
+              { label: '1', value: '1' },
+              { label: '2', value: '2' },
+              { label: '3', value: '3' },
+              { label: '4', value: '4' },
+            ]}
+            onChange={setNumberOfPlans}
+            value={numberOfPlans}
+          />
+          <Select
             label="Interval"
             options={[
               {
@@ -153,14 +168,15 @@ function Create() {
             value={intervalOption}
           />
           <Select
-            label="Max Number Weeks / Months"
+            label="Interval Count"
             options={[
               { label: '1', value: '1' },
               { label: '2', value: '2' },
               { label: '3', value: '3' },
+              { label: '4', value: '4' },
             ]}
-            onChange={setNumberOfPlans}
-            value={numberOfPlans}
+            onChange={setIntervalCount}
+            value={intervalCount}
           />
           <TextField
             type="number"
