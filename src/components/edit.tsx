@@ -184,12 +184,20 @@ function Edit() {
                 label="Interval"
                 options={[
                   {
+                    label: 'Daily',
+                    value: 'DAY',
+                  },
+                  {
                     label: 'Weekly',
                     value: 'WEEK',
                   },
                   {
                     label: 'Monthly',
                     value: 'MONTH',
+                  },
+                  {
+                    label: 'Yearly',
+                    value: 'YEAR',
                   },
                 ]}
                 onChange={setIntervalOption}
