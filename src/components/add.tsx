@@ -149,21 +149,25 @@ function Add() {
       )}
 
       <Stack>
-        {allPlans.length > 0
-          ? allPlans.map(plan => (
-              <Checkbox
-                key={plan.id}
-                label={plan.name}
-                onChange={checked => {
-                  const plans = checked
-                    ? selectedPlans.concat(plan.id)
-                    : selectedPlans.filter(id => id !== plan.id);
-                  setSelectedPlans(plans);
-                }}
-                checked={selectedPlans.includes(plan.id)}
-              />
-            ))
-          : !error && <Spinner />}
+        {allPlans.length > 0 ? (
+          allPlans.map(plan => (
+            <Checkbox
+              key={plan.id}
+              label={plan.name}
+              onChange={(checked: any) => {
+                const plans = checked
+                  ? selectedPlans.concat(plan.id)
+                  : selectedPlans.filter(id => id !== plan.id);
+                setSelectedPlans(plans);
+              }}
+              checked={selectedPlans.includes(plan.id)}
+            />
+          ))
+        ) : !error && allPlans.length === 0 ? (
+          <Text>No Selling Plans Found!</Text>
+        ) : (
+          !error && <Spinner />
+        )}
       </Stack>
     </>
   );
