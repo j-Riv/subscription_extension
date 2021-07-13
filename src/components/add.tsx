@@ -4,6 +4,7 @@ import {
   Text,
   Spinner,
   Stack,
+  StackItem,
   useData,
   useContainer,
   useLocale,
@@ -34,6 +35,7 @@ function Add() {
   // Session token contains information about the current user. Use it to authenticate calls
   // from your extension to your app server.
   const { getSessionToken } = useSessionToken();
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
   const [selectedPlans, setSelectedPlans] = useState<string[]>([]);
   const [allPlans, setAllPlans] = useState<any[]>([]);
@@ -62,9 +64,11 @@ function Add() {
       );
       // set state
       setAllPlans(planData);
+      setLoading(false);
     } catch (err) {
       console.log('Handle Error', err);
       setError(true);
+      setLoading(false);
     }
   };
 
@@ -151,22 +155,29 @@ function Add() {
       <Stack>
         {allPlans.length > 0 ? (
           allPlans.map(plan => (
-            <Checkbox
-              key={plan.id}
-              label={plan.name}
-              onChange={(checked: any) => {
-                const plans = checked
-                  ? selectedPlans.concat(plan.id)
-                  : selectedPlans.filter(id => id !== plan.id);
-                setSelectedPlans(plans);
-              }}
-              checked={selectedPlans.includes(plan.id)}
-            />
+            <StackItem fill>
+              <Checkbox
+                key={plan.id}
+                label={plan.name}
+                onChange={(checked: any) => {
+                  const plans = checked
+                    ? selectedPlans.concat(plan.id)
+                    : selectedPlans.filter(id => id !== plan.id);
+                  setSelectedPlans(plans);
+                }}
+                checked={selectedPlans.includes(plan.id)}
+              />
+            </StackItem>
           ))
-        ) : !error && allPlans.length === 0 ? (
+        ) : !loading && !error && allPlans.length === 0 ? (
           <Text>No Selling Plans Found!</Text>
         ) : (
-          !error && <Spinner />
+          loading &&
+          !error && (
+            <StackItem fill>
+              <Spinner />
+            </StackItem>
+          )
         )}
       </Stack>
     </>
