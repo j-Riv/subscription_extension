@@ -5,7 +5,7 @@ import {
   useContainer,
   useLocale,
   useSessionToken,
-} from '@shopify/argo-admin-react';
+} from '@shopify/admin-ui-extensions-react';
 import { Translations, translations } from './config';
 import serverUrl from './server-url';
 

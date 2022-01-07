@@ -3,13 +3,13 @@ import {
   Checkbox,
   Text,
   Spinner,
-  Stack,
+  BlockStack,
   StackItem,
   useData,
   useContainer,
   useLocale,
   useSessionToken,
-} from '@shopify/argo-admin-react';
+} from '@shopify/admin-ui-extensions-react';
 import { Translations, translations } from './config';
 import serverUrl from './server-url';
 
@@ -144,15 +144,15 @@ function Add() {
 
   return (
     <>
-      <Text size="titleSmall">Add Product to an existing plan or plans.</Text>
+      <Text size="small">Add Product to an existing plan or plans.</Text>
 
       {error && (
-        <Text color="error">
+        <Text appearance="critical">
           There has been a problem, please try again later...
         </Text>
       )}
 
-      <Stack>
+      <BlockStack>
         {allPlans.length > 0 ? (
           allPlans.map(plan => (
             <StackItem fill>
@@ -179,7 +179,7 @@ function Add() {
             </StackItem>
           )
         )}
-      </Stack>
+      </BlockStack>
     </>
   );
 }

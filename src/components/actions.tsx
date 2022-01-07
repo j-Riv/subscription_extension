@@ -1,14 +1,15 @@
 import React from 'react';
-import { Button, Stack } from '@shopify/argo-admin-react';
+import { Button, BlockStack } from '@shopify/admin-ui-extensions-react';
 
 function Actions({ onPrimary, onClose, title }) {
   return (
-    <Stack spacing="none" distribution="fill">
+    <BlockStack spacing="none" inlineAlignment="center">
       <Button title="Cancel" onPress={onClose} />
-      <Stack distribution="trailing">
-        <Button title={title} onPress={onPrimary} primary />
-      </Stack>
-    </Stack>
+      Block
+      <BlockStack inlineAlignment="center" spacing="loose">
+        <Button title={title} onPress={onPrimary} />
+      </BlockStack>
+    </BlockStack>
   );
 }
 
