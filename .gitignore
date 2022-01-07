@@ -31,3 +31,5 @@ build/
 .DS_Store
 .env
 server-url.ts
+
+CHANGES.md

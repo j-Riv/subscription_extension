@@ -16,23 +16,23 @@ export default serverUrl;
 Serve Extension Locally
 
 ```bash
-shopify serve
+shopify extension serve
 ```
 
 Build Extension
 
 ```bash
-shopify build
+shopify extension build
 ```
 
 Register Extension with an App
 
 ```bash
-shopify register
+shopify extension register
 ```
 
 Push Extension to Shopify
 
 ```bash
-shopify push
+shopify extension push
 ```

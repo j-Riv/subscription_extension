@@ -1,7 +1,8 @@
 import React from 'react';
-import { extend, render } from '@shopify/argo-admin-react';
+import { extend, render } from '@shopify/admin-ui-extensions-react';
 import Add from './components/add';
-import Create from './components/create';
+// import Create from './components/create';
+import Create from './components/createv2';
 import Edit from './components/edit';
 import Remove from './components/remove';
 

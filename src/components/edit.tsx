@@ -5,12 +5,12 @@ import {
   Text,
   Select,
   Spinner,
-  Stack,
+  BlockStack,
   useData,
   useContainer,
   useLocale,
   useSessionToken,
-} from '@shopify/argo-admin-react';
+} from '@shopify/admin-ui-extensions-react';
 import Actions from './actions';
 import { Translations, translations } from './config';
 import serverUrl from './server-url';
@@ -141,12 +141,12 @@ function Edit() {
 
   return (
     <>
-      <Stack spacing="none">
-        <Text size="titleLarge">Edit Subscription Plan</Text>
-      </Stack>
+      <BlockStack spacing="none">
+        <Text size="large">Edit Subscription Plan</Text>
+      </BlockStack>
 
       {error && (
-        <Text color="error">
+        <Text appearance="critical">
           There has been a problem, please try again later...
         </Text>
       )}
@@ -179,7 +179,7 @@ function Edit() {
           </Card>
 
           <Card title="Delivery and Discount" sectioned>
-            <Stack>
+            <BlockStack>
               <Select
                 label="Interval"
                 options={[
@@ -209,7 +209,7 @@ function Edit() {
                 value={percentageOff}
                 onChange={setPercentageOff}
               />
-            </Stack>
+            </BlockStack>
           </Card>
         </>
       )}

@@ -9,16 +9,19 @@
   "author": "Shopify <app-extensions@shopify.com>",
   "license": "MIT",
   "devDependencies": {
-    "@shopify/argo-admin-cli": "latest",
+    "@shopify/admin-ui-extensions-run": "^0.13.0",
+    "@shopify/checkout-ui-extensions-run": "^0.7.0",
     "@typescript-eslint/eslint-plugin": "^4.17.0",
     "typescript": "^3.0.0"
   },
   "scripts": {
-    "server": "argo-admin-cli server --entry=\"src/index.tsx\" --port=39351 --type=PRODUCT_SUBSCRIPTION",
-    "build": "argo-admin-cli build --entry=\"src/index.tsx\""
+    "argo-server": "argo-admin-cli server --entry=\"src/index.tsx\" --port=39351 --type=PRODUCT_SUBSCRIPTION",
+    "argo-build": "argo-admin-cli build --entry=\"src/index.tsx\"",
+    "server": "admin-ui-extensions-run server --entry=\"src/index.tsx\" --port=39351 --type=PRODUCT_SUBSCRIPTION",
+    "build": "admin-ui-extensions-run build --entry=\"src/index.tsx\""
   },
   "dependencies": {
-    "@shopify/argo-admin-react": "latest",
-    "react": "^16.13.0"
+    "@shopify/admin-ui-extensions-react": "^1.0.1",
+    "react": "^17.0.2"
   }
 }
