@@ -10,7 +10,6 @@
   "license": "MIT",
   "devDependencies": {
     "@shopify/admin-ui-extensions-run": "^0.13.0",
-    "@shopify/checkout-ui-extensions-run": "^0.7.0",
     "@typescript-eslint/eslint-plugin": "^4.17.0",
     "typescript": "^3.0.0"
   },
