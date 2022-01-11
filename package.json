@@ -14,8 +14,6 @@
     "typescript": "^3.0.0"
   },
   "scripts": {
-    "argo-server": "argo-admin-cli server --entry=\"src/index.tsx\" --port=39351 --type=PRODUCT_SUBSCRIPTION",
-    "argo-build": "argo-admin-cli build --entry=\"src/index.tsx\"",
     "server": "admin-ui-extensions-run server --entry=\"src/index.tsx\" --port=39351 --type=PRODUCT_SUBSCRIPTION",
     "build": "admin-ui-extensions-run build --entry=\"src/index.tsx\""
   },

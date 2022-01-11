@@ -5,7 +5,6 @@ function Actions({ onPrimary, onClose, title }) {
   return (
     <BlockStack spacing="none" inlineAlignment="center">
       <Button title="Cancel" onPress={onClose} />
-      Block
       <BlockStack inlineAlignment="center" spacing="loose">
         <Button title={title} onPress={onPrimary} />
       </BlockStack>

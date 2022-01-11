@@ -10,6 +10,5 @@ export interface SellingPlan {
   intervalCount: string;
   intervalOption: string;
   percentageOff: string;
-  planName: string;
   position?: number;
 }
