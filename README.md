@@ -36,3 +36,7 @@ Push Extension to Shopify
 ```bash
 shopify extension push
 ```
+
+### Resources
+
+[Shopify UI Extensions](https://github.com/Shopify/ui-extensions)

@@ -5,29 +5,12 @@ import {
   Text,
   Select,
   BlockStack,
-  useData,
-  useContainer,
-  useLocale,
-  useSessionToken,
 } from '@shopify/admin-ui-extensions-react';
-import { Translations, translations } from './config';
 
 function SellingPlanForm({ index, handleSellingPlans }) {
-  const [planName, setPlanName] = useState<string>('');
   const [intervalOption, setIntervalOption] = useState<string>('MONTH');
   const [intervalCount, setIntervalCount] = useState<string>('1');
   const [percentageOff, setPercentageOff] = useState<string>('5');
-
-  const handlePlanName = (name: string) => {
-    setPlanName(name);
-    handleSellingPlans(index, {
-      id: index,
-      intervalCount,
-      intervalOption,
-      percentageOff,
-      planName: name,
-    });
-  };
 
   const handleIntervalCount = (count: string) => {
     setIntervalCount(count);
@@ -36,7 +19,6 @@ function SellingPlanForm({ index, handleSellingPlans }) {
       intervalCount: count,
       intervalOption,
       percentageOff,
-      planName,
     });
   };
 
@@ -47,7 +29,6 @@ function SellingPlanForm({ index, handleSellingPlans }) {
       intervalCount,
       intervalOption: interval,
       percentageOff,
-      planName,
     });
   };
 
@@ -58,17 +39,15 @@ function SellingPlanForm({ index, handleSellingPlans }) {
       intervalCount,
       intervalOption,
       percentageOff: percent,
-      planName,
     });
   };
 
   return (
     <CardSection title={`Selling Plan ${index}`}>
-      <TextField
-        label="Plan Name"
-        value={planName}
-        onChange={value => handlePlanName(value)}
-      />
+      <Text size="small" emphasized appearance="subdued">
+        The selling plan name will automatically be generated based on interval,
+        interval count and discount percentage.
+      </Text>
       <BlockStack>
         <Select
           label="Interval"

@@ -33,14 +33,11 @@ function Create() {
   // Mock plan settings
   const [error, setError] = useState<boolean>(false);
   const [planGroupName, setPlanGroupName] = useState<string>('');
-  const [percentageOff, setPercentageOff] = useState<string>('5');
   const [merchantCode, setMerchantCode] = useState<string>('');
   const [planGroupOption, setPlanGroupOption] = useState<string>('');
   const [planGroupDescription, setPlanGroupDescription] = useState<string>('');
   const [numberOfPlans, setNumberOfPlans] = useState<string>('1');
-  const [sellingPlansInput, setSellingPlansInput] = useState<{
-    [key: number]: SellingPlan;
-  }>({});
+
   let sellingPlanInitialState: { [key: number]: SellingPlan } = {};
   for (let i = 1; i <= 10; i++) {
     sellingPlanInitialState[i] = {
@@ -48,12 +45,9 @@ function Create() {
       intervalCount: '1',
       intervalOption: 'MONTH',
       percentageOff: '5',
-      planName: '',
     };
   }
-  // const [sellingPlans, setSellingPlans] = useState<{
-  //   [key: number]: SellingPlan;
-  // }>(sellingPlanInitialState);
+
   const [sellingPlans, setSellingPlans] = useState<any>(
     sellingPlanInitialState
   );
@@ -160,7 +154,7 @@ function Create() {
         </Text>
       )}
 
-      <Card title="Create a Subscription Plan Group" sectioned>
+      <Card title="Subscription Plan Group" sectioned>
         <TextField
           label="Group Name"
           value={planGroupName}
