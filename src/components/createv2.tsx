@@ -53,9 +53,11 @@ function Create() {
   );
 
   const handleSellingPlans = (id: number, sellingPlan: SellingPlan) => {
-    const sellingPlansClone = { ...sellingPlans };
-    sellingPlansClone[id] = sellingPlan;
-    setSellingPlans(sellingPlansClone);
+    console.log('Changing', sellingPlan);
+    // const sellingPlansClone = { ...sellingPlans };
+
+    sellingPlans[id] = sellingPlan;
+    setSellingPlans(sellingPlans);
   };
 
   const generateSellingPlans = () => {
