@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import {
   Card,
   TextField,
@@ -53,9 +53,6 @@ function Create() {
   );
 
   const handleSellingPlans = (id: number, sellingPlan: SellingPlan) => {
-    console.log('Changing', sellingPlan);
-    // const sellingPlansClone = { ...sellingPlans };
-
     sellingPlans[id] = sellingPlan;
     setSellingPlans(sellingPlans);
   };
@@ -67,10 +64,6 @@ function Create() {
     }
     return plans;
   };
-
-  useEffect(() => {
-    console.log('PLANS HAVE CHANGED', sellingPlans);
-  }, sellingPlans);
 
   const onPrimaryAction = useCallback(async () => {
     const token = await getSessionToken();
